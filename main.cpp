@@ -1,10 +1,15 @@
 # include <iostream>
 # include <cstring>
 # include <algorithm>
+# include <thread>
 
 
 void func(int&& x) {
     std::cout << "Rvalue reference = " << x << std::endl;
+}
+
+void str_by_ref(std::string& str) {
+    str = "xyz";
 }
 
 class string {
@@ -43,6 +48,10 @@ class string {
     }
 
 };
+
+void hello() {
+    std::cout << "Hello thread" << std::endl;
+}
 
 
 int main() {
@@ -90,6 +99,23 @@ int main() {
 
     std::cout << "address of str_b: " << (void*) str_b.get_data() << std::endl;
     std::cout << "address of str_a: " << (void*) str_a.get_data() << std::endl;
+
+
+    /**
+     * @brief threads
+     * 
+     * @return std::thread 
+     */
+    std::thread thr(hello);
+    thr.join();
+
+    std::string str = "abc";
+
+    std::thread thr_abc(str_by_ref, std::ref(str));
+
+    thr_abc.join();
+
+    std::cout << "str is now: " << str << std::endl;
 
     return 0;
 }
