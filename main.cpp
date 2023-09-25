@@ -2,6 +2,7 @@
 # include <cstring>
 # include <algorithm>
 # include <thread>
+# include <chrono>
 
 
 void func(int&& x) {
@@ -51,6 +52,21 @@ class string {
 
 void hello() {
     std::cout << "Hello thread" << std::endl;
+}
+
+
+void thread_num(int num) {
+    std::this_thread::sleep_for(std::chrono::seconds(num));
+    std::cout << "This is thread: " << num << std::endl;
+}
+
+
+void interruption_demo(std::string str) {
+    for (int i = 0; i < 5; ++i) {
+        std::cout << str[0];
+        std::this_thread::sleep_for(std::chrono::seconds(1));
+        std::cout << str[1] << str[2] << std::endl; 
+    }
 }
 
 
@@ -112,10 +128,33 @@ int main() {
     std::string str = "abc";
 
     std::thread thr_abc(str_by_ref, std::ref(str));
+    std::cout << "Thread handle of thr_abc before join(): " << thr_abc.native_handle() << std::endl;
 
     thr_abc.join();
+    std::cout << "Thread handle of thr_abc after join(): " << thr_abc.native_handle() << std::endl;
 
     std::cout << "str is now: " << str << std::endl;
+
+    std::cout << "Start 3 threads:" << std:: endl;
+
+    // std::thread t1(thread_num, 1);
+    // std::thread t2(thread_num, 2);
+    // std::thread t3(thread_num, 3);
+
+    // t1.join();
+    // t2.join();
+    // t3.join();
+
+    // std::thread t_abc(interruption_demo, "abc");
+    // std::thread t_def(interruption_demo, "def");
+    // std::thread t_xyz(interruption_demo, "xyz");
+
+    // t_abc.join();
+    // t_def.join();
+    // t_xyz.join();
+    
+
+
 
     return 0;
 }
