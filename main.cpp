@@ -3,7 +3,10 @@
 # include <algorithm>
 # include <thread>
 # include <chrono>
+# include <mutex>
 
+
+std::mutex task_mutex;
 
 void func(int&& x) {
     std::cout << "Rvalue reference = " << x << std::endl;
@@ -66,6 +69,19 @@ void interruption_demo(std::string str) {
         std::cout << str[0];
         std::this_thread::sleep_for(std::chrono::seconds(1));
         std::cout << str[1] << str[2] << std::endl; 
+    }
+}
+
+
+void mutex_demo(const std::string& str) {
+    for (int i = 0; i < 5; i++) {
+        task_mutex.lock();
+
+        std::cout << str[0];
+        std::this_thread::sleep_for(std::chrono::seconds(1));
+        std::cout << str[1] << str[2] << std::endl; 
+
+        task_mutex.unlock();
     }
 }
 
@@ -145,13 +161,22 @@ int main() {
     // t2.join();
     // t3.join();
 
-    // std::thread t_abc(interruption_demo, "abc");
-    // std::thread t_def(interruption_demo, "def");
-    // std::thread t_xyz(interruption_demo, "xyz");
+    std::thread t_abc(interruption_demo, "abc");
+    std::thread t_def(interruption_demo, "def");
+    std::thread t_xyz(interruption_demo, "xyz");
 
-    // t_abc.join();
-    // t_def.join();
-    // t_xyz.join();
+    t_abc.join();
+    t_def.join();
+    t_xyz.join();
+
+
+    std::thread t_abc(interruption_demo, "abc");
+    std::thread t_def(interruption_demo, "def");
+    std::thread t_xyz(interruption_demo, "xyz");
+
+    t_abc.join();
+    t_def.join();
+    t_xyz.join();
     
 
 
