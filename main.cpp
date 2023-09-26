@@ -7,6 +7,30 @@
 
 
 std::mutex task_mutex;
+std::mutex print_mutex;
+
+// simple thread safe vector class
+class Vector {
+    std::mutex mut;
+    std::vector<int> vec;
+
+    public:
+
+    void push_back(const int& i) {
+        mut.lock();
+        vec.push_back(i);
+        mut.unlock();
+    }
+
+    void print() {
+        mut.lock();
+        for (auto i: vec) {
+            std::cout << i << ", ";
+        }
+        mut.unlock();
+    }
+};
+
 
 void func(int&& x) {
     std::cout << "Rvalue reference = " << x << std::endl;
@@ -82,6 +106,34 @@ void mutex_demo(const std::string& str) {
         std::cout << str[1] << str[2] << std::endl; 
 
         task_mutex.unlock();
+    }
+}
+
+void add_to_vec(Vector& vec) {
+    for (int i = 0; i < 5; i++) {
+        vec.push_back(i);
+        std::this_thread::sleep_for(std::chrono::milliseconds(50));
+        vec.print();
+    }
+}
+
+
+void add_to_vec_guard(std::string str) {
+    for (int i = 0; i < 5; i++) {
+        try {
+            std::lock_guard<std::mutex> lck_guard(print_mutex);
+
+            std::cout << str[0];
+            std::this_thread::sleep_for(std::chrono::seconds(1));
+            std::cout << str[1] << str[2] << std::endl; 
+
+            // throw std::exception();
+
+            std::this_thread::sleep_for(std::chrono::milliseconds(25));
+        }
+        catch (std::exception& e) {
+            std::cout << "Exception caught: " << e.what() << std::endl;
+        }
     }
 }
 
@@ -161,25 +213,44 @@ int main() {
     // t2.join();
     // t3.join();
 
-    std::thread t_abc(interruption_demo, "abc");
-    std::thread t_def(interruption_demo, "def");
-    std::thread t_xyz(interruption_demo, "xyz");
+    // std::thread t_abc(interruption_demo, "abc");
+    // std::thread t_def(interruption_demo, "def");
+    // std::thread t_xyz(interruption_demo, "xyz");
 
-    t_abc.join();
-    t_def.join();
-    t_xyz.join();
+    // t_abc.join();
+    // t_def.join();
+    // t_xyz.join();
 
 
-    std::thread t_abc(interruption_demo, "abc");
-    std::thread t_def(interruption_demo, "def");
-    std::thread t_xyz(interruption_demo, "xyz");
+    // std::cout << "after using mutex: " << std::endl;
 
-    t_abc.join();
-    t_def.join();
-    t_xyz.join();
+    // std::thread t_abc_2(mutex_demo, "abc");
+    // std::thread t_def_2(mutex_demo, "def");
+    // std::thread t_xyz_2(mutex_demo, "xyz");
+
+    // t_abc_2.join();
+    // t_def_2.join();
+    // t_xyz_2.join();
     
 
+    Vector v;
 
+    std::thread thr_v1(add_to_vec, std::ref(v));
+    std::thread thr_v2(add_to_vec, std::ref(v));
+    std::thread thr_v3(add_to_vec, std::ref(v));
+
+    thr_v1.join();
+    thr_v2.join();
+    thr_v3.join();
+
+
+    std::thread t_abc_2(add_to_vec_guard, "abc");
+    std::thread t_def_2(add_to_vec_guard, "def");
+    std::thread t_xyz_2(add_to_vec_guard, "xyz");
+
+    t_abc_2.join();
+    t_def_2.join();
+    t_xyz_2.join();
 
     return 0;
 }
