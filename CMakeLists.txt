@@ -8,6 +8,9 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}")
 
 message(STATUS "CMAKE_SOURCE_DIR = ${CMAKE_SOURCE_DIR}")
 
-add_executable(main main.cpp)
+# Include the directory containing header files
+include_directories(${CMAKE_SOURCE_DIR})
+
+add_executable(main main.cpp class_singleton.cpp)
 add_executable(assignment1 assignment1.cpp)
 add_executable(assignment2 assignment2.cpp)

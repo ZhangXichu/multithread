@@ -1,15 +1,19 @@
-# include <iostream>
 # include <cstring>
 # include <algorithm>
 # include <thread>
 # include <chrono>
 # include <mutex>
-
+# include <shared_mutex>
+# include "class_singleton.h"
 
 std::mutex task_mutex;
 std::mutex print_mutex;
+std::mutex mut;
+std::shared_mutex shared_mut;
 
 int shared_var = 0;
+int shared_x = 0;
+
 
 // simple thread safe vector class
 class Vector {
@@ -32,6 +36,7 @@ class Vector {
         mut.unlock();
     }
 };
+
 
 
 void func(int&& x) {
@@ -150,6 +155,38 @@ auto unique_lock_demo() {
             std::this_thread::sleep_for(std::chrono::milliseconds(25));
         }
     } // The mutex is automatically released here
+}
+
+
+/**
+ * @brief reader and writer
+ * 
+ */
+
+void writer() {
+    std::lock_guard<std::mutex> lck_guard(mut);
+    shared_x += 1;
+}
+
+void reader() {
+    std::lock_guard<std::mutex> lck_guard(mut);
+
+    std::this_thread::sleep_for(std::chrono::milliseconds(100));
+}
+
+void reader_shared_mut() { // much faster then the reader above
+    std::shared_lock<std::shared_mutex> lck_guard(shared_mut);
+
+    std::this_thread::sleep_for(std::chrono::milliseconds(100));
+}
+
+
+void task_singleton() {
+    Singleton& single = get_singleton();
+
+    // check the adddress to make sure that
+    // all the threads get the same instance
+    std::cout << &single << std::endl; 
 }
 
 
@@ -280,6 +317,38 @@ int main() {
     t_a5.join();
 
     std::cout << "the value of share_var: " << shared_var << std::endl;
+
+    // effective way to start multiple threads
+    std::vector<std::thread> vec_threads;
+
+    for (int i = 0; i < 20; i++) {
+        vec_threads.push_back(std::thread(reader_shared_mut));
+    }
+
+    vec_threads.push_back(std::thread(writer));
+    vec_threads.push_back(std::thread(writer));
+
+    for (int i = 0; i < 20; i++) {
+        vec_threads.push_back(std::thread(reader_shared_mut));
+    }
+
+    for (auto& thr : vec_threads) {
+        thr.join();
+    }
+
+    // task_singleton();
+
+    // shared data initialization
+    // singleton class
+    std::vector<std::thread> threads_s;
+
+    for (int i = 0; i < 10; i++) {
+        threads_s.push_back(std::thread(task_singleton));
+    }
+
+    for (auto& thr : threads_s) {
+        thr.join();
+    }
 
     return 0;
 }
