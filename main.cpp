@@ -9,6 +9,8 @@
 std::mutex task_mutex;
 std::mutex print_mutex;
 
+int shared_var = 0;
+
 // simple thread safe vector class
 class Vector {
     std::mutex mut;
@@ -138,6 +140,19 @@ void add_to_vec_guard(std::string str) {
 }
 
 
+auto unique_lock_demo() {
+    int inc = 1;
+    {
+        std::unique_lock<std::mutex> lock(task_mutex);
+        for (int i = 0; i < 10; i++) {
+            shared_var += inc;
+
+            std::this_thread::sleep_for(std::chrono::milliseconds(25));
+        }
+    } // The mutex is automatically released here
+}
+
+
 int main() {
 
     /**
@@ -233,24 +248,38 @@ int main() {
     // t_xyz_2.join();
     
 
-    Vector v;
+    // Vector v;
 
-    std::thread thr_v1(add_to_vec, std::ref(v));
-    std::thread thr_v2(add_to_vec, std::ref(v));
-    std::thread thr_v3(add_to_vec, std::ref(v));
+    // std::thread thr_v1(add_to_vec, std::ref(v));
+    // std::thread thr_v2(add_to_vec, std::ref(v));
+    // std::thread thr_v3(add_to_vec, std::ref(v));
 
-    thr_v1.join();
-    thr_v2.join();
-    thr_v3.join();
+    // thr_v1.join();
+    // thr_v2.join();
+    // thr_v3.join();
 
 
-    std::thread t_abc_2(add_to_vec_guard, "abc");
-    std::thread t_def_2(add_to_vec_guard, "def");
-    std::thread t_xyz_2(add_to_vec_guard, "xyz");
+    // std::thread t_abc_2(add_to_vec_guard, "abc");
+    // std::thread t_def_2(add_to_vec_guard, "def");
+    // std::thread t_xyz_2(add_to_vec_guard, "xyz");
 
-    t_abc_2.join();
-    t_def_2.join();
-    t_xyz_2.join();
+    // t_abc_2.join();
+    // t_def_2.join();
+    // t_xyz_2.join();
+
+    std::thread t_a(unique_lock_demo);
+    std::thread t_a2(unique_lock_demo);
+    std::thread t_a3(unique_lock_demo);
+    std::thread t_a4(unique_lock_demo);
+    std::thread t_a5(unique_lock_demo);
+
+    t_a.join();
+    t_a2.join();
+    t_a3.join();
+    t_a4.join();
+    t_a5.join();
+
+    std::cout << "the value of share_var: " << shared_var << std::endl;
 
     return 0;
 }
