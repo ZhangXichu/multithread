@@ -2,6 +2,7 @@
 # include <algorithm>
 # include <shared_mutex>
 # include <random>
+# include <functional>
 # include "include/class_singleton.h"
 # include "include/dining_philosophers.h"
 
@@ -393,10 +394,30 @@ int main() {
     
 # ifdef DINING
 
+    unsigned int x;
+
+    std::cout << "Pick a dining method (enter the corresponding integer): " << std::endl;
+    std::cout << "(0) Original method: everyone picks the left fork" << std::endl;
+    std::cout << "(1) Solution 1: try to pick up both forks" << std::endl;
+    std::cin >> x;
+
+    std::function<void(int)> dine_func;
+
+    switch(x) {
+        case 0:
+            dine_func = dine;
+            break;
+        case 1:
+            dine_func = dine_both_fork;
+            break;
+        default:
+            std::cout << "No such option, slect again: " << std::endl;
+    }
+
     std::vector<std::thread> philos;
 
     for (int i = 0; i < nphilosophers; ++i) {
-        philos.push_back(std::move(std::thread{dine_both_fork, i}));
+        philos.push_back(std::move(std::thread{dine_func, i}));
     }
 
     for (auto& philo: philos) {

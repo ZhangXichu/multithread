@@ -22,6 +22,8 @@ void print(int n, const std::string& str) {
     std::cout << "Philosopher " << names[n] << str << std::endl;
 }
 
+// the original way of dining
+// results in deadlock
 void dine(int nphilo) {
     int lfork = nphilo;
     int rfork = (nphilo + 1) % nforks;
