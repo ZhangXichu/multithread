@@ -29,5 +29,6 @@ void print(int n, const std::string& str);
 
 void dine(int nphilo);
 void dine_both_fork(int nphilo);
+void dine_hierarchy(int nphilo);
 
 # endif

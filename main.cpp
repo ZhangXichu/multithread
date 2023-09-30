@@ -399,6 +399,8 @@ int main() {
     std::cout << "Pick a dining method (enter the corresponding integer): " << std::endl;
     std::cout << "(0) Original method: everyone picks the left fork" << std::endl;
     std::cout << "(1) Solution 1: try to pick up both forks" << std::endl;
+    std::cout << "(2) Solution 2: pick the 2nd fork only if the first fork has lower index (hierarchy lock)" 
+        << std::endl;
     std::cin >> x;
 
     std::function<void(int)> dine_func;
@@ -410,8 +412,12 @@ int main() {
         case 1:
             dine_func = dine_both_fork;
             break;
+        case 2:
+            dine_func = dine_hierarchy;
+            break;
         default:
             std::cout << "No such option, slect again: " << std::endl;
+            std::cin >> x;
     }
 
     std::vector<std::thread> philos;
