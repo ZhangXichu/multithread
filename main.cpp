@@ -4,6 +4,7 @@
 # include <chrono>
 # include <mutex>
 # include <shared_mutex>
+# include <random>
 # include "class_singleton.h"
 
 std::mutex task_mutex;
@@ -45,6 +46,15 @@ void func(int&& x) {
 
 void str_by_ref(std::string& str) {
     str = "xyz";
+}
+
+void static_var() {
+    static int var_s = 1;
+
+    var_s += 1;
+
+    std::cout << "var_s = " << var_s << std::endl;
+
 }
 
 class string {
@@ -190,6 +200,17 @@ void task_singleton() {
 }
 
 
+thread_local std::mt19937 mt;
+
+void rand_nums() {
+        std::uniform_real_distribution<double> dist(0, 1);
+
+        for (int i = 0; i < 10; i++) {
+            std::cout << dist(mt) << std::endl;
+        }
+    }
+
+
 int main() {
 
     /**
@@ -235,6 +256,11 @@ int main() {
 
     std::cout << "address of str_b: " << (void*) str_b.get_data() << std::endl;
     std::cout << "address of str_a: " << (void*) str_a.get_data() << std::endl;
+
+    std::cout << "Static variable: " << std::endl;
+    static_var();
+    static_var();
+    static_var();
 
 
     /**
@@ -349,6 +375,17 @@ int main() {
     for (auto& thr : threads_s) {
         thr.join();
     }
+
+    std::thread t_rnd1(rand_nums);
+    std::thread t_rnd2(rand_nums);
+
+    t_rnd1.join();
+    t_rnd2.join();
+
+    
+
+    
+    
 
     return 0;
 }
