@@ -1,11 +1,9 @@
 # include <cstring>
 # include <algorithm>
-# include <thread>
-# include <chrono>
-# include <mutex>
 # include <shared_mutex>
 # include <random>
-# include "class_singleton.h"
+# include "include/class_singleton.h"
+# include "include/dining_philosophers.h"
 
 std::mutex task_mutex;
 std::mutex print_mutex;
@@ -330,6 +328,8 @@ int main() {
     // t_def_2.join();
     // t_xyz_2.join();
 
+# ifdef UNIQUE_LOCK_DEMO
+
     std::thread t_a(unique_lock_demo);
     std::thread t_a2(unique_lock_demo);
     std::thread t_a3(unique_lock_demo);
@@ -362,7 +362,6 @@ int main() {
         thr.join();
     }
 
-    // task_singleton();
 
     // shared data initialization
     // singleton class
@@ -382,8 +381,27 @@ int main() {
     t_rnd1.join();
     t_rnd2.join();
 
-    
+# endif
 
+    
+# ifdef DINING
+
+    std::vector<std::thread> philos;
+
+    for (int i = 0; i < nphilosophers; ++i) {
+        philos.push_back(std::move(std::thread{dine, i}));
+    }
+
+    for (auto& philo: philos) {
+        philo.join();
+    }
+
+    for (int i = 0; i < nphilosophers; i++) {
+        std::cout << "Philosopher " << names[i];
+        std::cout << " had " << mouthfuls[i] << "mouthfuls" << std::endl;
+    }
+
+# endif
     
     
 

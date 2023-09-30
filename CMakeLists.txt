@@ -11,6 +11,10 @@ message(STATUS "CMAKE_SOURCE_DIR = ${CMAKE_SOURCE_DIR}")
 # Include the directory containing header files
 include_directories(${CMAKE_SOURCE_DIR})
 
-add_executable(main main.cpp class_singleton.cpp)
+add_executable(main main.cpp class_singleton.cpp dining_philosophers.cpp)
+
+target_compile_definitions(main PRIVATE DINING)
+# target_compile_definitions(main PRIVATE UNIQUE_LOCK_DEMO)
+
 add_executable(assignment1 assignment1.cpp)
 add_executable(assignment2 assignment2.cpp)

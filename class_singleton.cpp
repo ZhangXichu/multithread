@@ -1,4 +1,4 @@
-# include "class_singleton.h"
+# include "include/class_singleton.h"
 
 // the first thread will create an instance
 // and the other threads are gonna just return the same instance
