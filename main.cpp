@@ -281,52 +281,59 @@ int main() {
 
     std::cout << "Start 3 threads:" << std:: endl;
 
-    // std::thread t1(thread_num, 1);
-    // std::thread t2(thread_num, 2);
-    // std::thread t3(thread_num, 3);
+# ifdef THR_INTERRUPT_DEMO
 
-    // t1.join();
-    // t2.join();
-    // t3.join();
+    std::thread t1(thread_num, 1);
+    std::thread t2(thread_num, 2);
+    std::thread t3(thread_num, 3);
 
-    // std::thread t_abc(interruption_demo, "abc");
-    // std::thread t_def(interruption_demo, "def");
-    // std::thread t_xyz(interruption_demo, "xyz");
+    t1.join();
+    t2.join();
+    t3.join();
 
-    // t_abc.join();
-    // t_def.join();
-    // t_xyz.join();
+    std::thread t_abc(interruption_demo, "abc");
+    std::thread t_def(interruption_demo, "def");
+    std::thread t_xyz(interruption_demo, "xyz");
 
+    t_abc.join();
+    t_def.join();
+    t_xyz.join();
 
-    // std::cout << "after using mutex: " << std::endl;
+    std::cout << "after using mutex: " << std::endl;
 
-    // std::thread t_abc_2(mutex_demo, "abc");
-    // std::thread t_def_2(mutex_demo, "def");
-    // std::thread t_xyz_2(mutex_demo, "xyz");
+    std::thread t_abc_2(mutex_demo, "abc");
+    std::thread t_def_2(mutex_demo, "def");
+    std::thread t_xyz_2(mutex_demo, "xyz");
 
-    // t_abc_2.join();
-    // t_def_2.join();
-    // t_xyz_2.join();
+    t_abc_2.join();
+    t_def_2.join();
+    t_xyz_2.join();
+
+# endif
     
 
-    // Vector v;
+# ifdef LOCK_GUARD_DEMO
+    Vector v;
 
-    // std::thread thr_v1(add_to_vec, std::ref(v));
-    // std::thread thr_v2(add_to_vec, std::ref(v));
-    // std::thread thr_v3(add_to_vec, std::ref(v));
+    std::thread thr_v1(add_to_vec, std::ref(v));
+    std::thread thr_v2(add_to_vec, std::ref(v));
+    std::thread thr_v3(add_to_vec, std::ref(v));
 
-    // thr_v1.join();
-    // thr_v2.join();
-    // thr_v3.join();
+    thr_v1.join();
+    thr_v2.join();
+    thr_v3.join();
 
 
-    // std::thread t_abc_2(add_to_vec_guard, "abc");
-    // std::thread t_def_2(add_to_vec_guard, "def");
-    // std::thread t_xyz_2(add_to_vec_guard, "xyz");
+    std::thread t_abc_2(add_to_vec_guard, "abc");
+    std::thread t_def_2(add_to_vec_guard, "def");
+    std::thread t_xyz_2(add_to_vec_guard, "xyz");
 
-    // t_abc_2.join();
-    // t_def_2.join();
-    // t_xyz_2.join();
+    t_abc_2.join();
+    t_def_2.join();
+    t_xyz_2.join();
+
+# endif
+
 
 # ifdef UNIQUE_LOCK_DEMO
 
@@ -389,7 +396,7 @@ int main() {
     std::vector<std::thread> philos;
 
     for (int i = 0; i < nphilosophers; ++i) {
-        philos.push_back(std::move(std::thread{dine, i}));
+        philos.push_back(std::move(std::thread{dine_both_fork, i}));
     }
 
     for (auto& philo: philos) {

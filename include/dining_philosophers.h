@@ -23,8 +23,11 @@ extern std::mutex fork_mutex[nforks];
 
 extern std::mutex print_mutex_ph;
 
+void print(int n, const std::string& str, int lfork, int rfork);
 void print(int n, const std::string& str, int forkno);
 void print(int n, const std::string& str);
+
 void dine(int nphilo);
+void dine_both_fork(int nphilo);
 
 # endif

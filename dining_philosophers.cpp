@@ -6,6 +6,12 @@ std::mutex fork_mutex[nforks];
 std::mutex print_mutex_ph;
 
 
+void print(int n, const std::string& str, int lfork, int rfork) {
+    std::lock_guard<std::mutex> print_lock(print_mutex_ph);
+    std::cout << "Philosopher " << names[n] << str << std::endl;
+    std::cout << lfork << " and " << rfork << std::endl;
+}
+
 void print(int n, const std::string& str, int forkno) {
     std::lock_guard<std::mutex> print_lock(print_mutex_ph);
     std::cout << "Philosopher " << names[n] << str << forkno << std::endl;
@@ -50,6 +56,43 @@ void dine(int nphilo) {
 
     print(nphilo, " puts down fork ", lfork);
     print(nphilo, " puts down fork ", rfork);
+    print(nphilo, " is thinking...");
+
+    fork_mutex[lfork].unlock();
+    fork_mutex[rfork].unlock();
+    std::this_thread::sleep_for(think_time);
+}
+
+
+/**
+ * @brief try to lock both forks
+ * 
+ * @param nphilo 
+ */
+void dine_both_fork(int nphilo) {
+    int lfork = nphilo;
+    int rfork = (nphilo + 1) % nforks;
+
+    print(nphilo, " \'s left forks are ", lfork, rfork);
+    print(nphilo, " is thinkng");
+
+    std::this_thread::sleep_for(think_time);
+
+    print(nphilo, "reaches for fork number ", lfork, rfork);
+
+    // each philosohper needss 2 forks to eat
+
+    // lock both of the forks
+    std::lock(fork_mutex[lfork], fork_mutex[rfork]);
+    print(nphilo, " picks up fork ", lfork, rfork);
+
+    // success
+    print(nphilo, " is eating...");
+    mouthfuls[nphilo] ++;
+
+    std::this_thread::sleep_for(eat_time);
+
+    print(nphilo, " puts down fork ", lfork, rfork);
     print(nphilo, " is thinking...");
 
     fork_mutex[lfork].unlock();
