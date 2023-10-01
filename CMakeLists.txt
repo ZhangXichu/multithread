@@ -17,7 +17,8 @@ add_executable(main main.cpp class_singleton.cpp dining_philosophers.cpp)
 # target_compile_definitions(main PRIVATE THR_INTERRUPT_DEMO)
 # target_compile_definitions(main PRIVATE UNIQUE_LOCK_DEMO) 
 # target_compile_definitions(main PRIVATE DINING)
-target_compile_definitions(main PRIVATE SYNC)
+# target_compile_definitions(main PRIVATE SYNC)
+target_compile_definitions(main PRIVATE SYNC_COND_VAR)
 
 
 add_executable(assignment1 assignment1.cpp)

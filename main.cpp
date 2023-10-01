@@ -3,12 +3,13 @@
 # include <shared_mutex>
 # include <random>
 # include <functional>
+# include <condition_variable>
 # include "include/class_singleton.h"
 # include "include/dining_philosophers.h"
 
 // flagss for thread communication
 bool update_progress = false;
-bool completed = false;
+bool completed = false; // shows whether data fetching (downloading) is completed
 
 
 std::mutex task_mutex;
@@ -20,7 +21,10 @@ std::string sdata;
 
 // mutexes to protect the shared variables
 std::mutex data_mutex;
-std::mutex completed_mutex; // shows whether data fetching (downloading) is completed
+std::mutex completed_mutex; 
+
+std::mutex mut_cond_var;
+std::condition_variable cond_var;
 
 int shared_var = 0;
 int shared_x = 0;
@@ -295,6 +299,48 @@ void process_data() {
     // Some processing
 }
 
+/*
+demo - conditional variable
+*/
+void reader_cond() {
+    std::cout << "Reader thread locking mutex" << std::endl;
+    
+    std::unique_lock<std::mutex> uniq_lck(mut);
+
+    std::cout << "Reader thread has locked the mutex" << std::endl;
+
+    std::cout << "Reader thread sleeping..." << std::endl;
+
+    // it's necessary to use the unique_lock in this function,
+    // since here the condition_variable must be able to unlock the mutex
+    cond_var.wait(uniq_lck);
+
+    std::cout << "Reader thread wakes up" << std::endl;
+    std::cout << "Data is " << sdata << std::endl;
+}
+
+
+void writer_cond() {
+    {
+        std::cout << "Writer thread locking mutex" << std::endl;
+
+        // here we can use lock_guard (less overhead) 
+        // because we don't need to call unlock
+        std::lock_guard<std::mutex> lck_guard(mut); 
+        std::cout << "Writer thread has locked the mutex" << std::endl;
+
+        std::this_thread::sleep_for(std::chrono::seconds(2));
+
+        std::cout << "Writer thread modifying data..." << std::endl;
+
+        // modify the data
+        sdata = "Populated";
+    }
+    std::cout << "Write thread sends notification" << std::endl;
+
+    cond_var.notify_one();
+} 
+
 
 int main() {
 
@@ -534,6 +580,22 @@ int main() {
     prog.join();
     processor.join();
 
+# endif
+
+
+/*
+use of conditional variable
+*/
+# ifdef SYNC_COND_VAR
+    sdata = "Empty";
+
+    std::cout << "Data is " << sdata << std::endl;
+
+    std::thread reader(reader_cond);
+    std::thread writer(writer_cond);
+
+    writer.join();
+    reader.join();
 # endif
     
 
