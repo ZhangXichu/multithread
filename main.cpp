@@ -6,10 +6,21 @@
 # include "include/class_singleton.h"
 # include "include/dining_philosophers.h"
 
+// flagss for thread communication
+bool update_progress = false;
+bool completed = false;
+
+
 std::mutex task_mutex;
 std::mutex print_mutex;
 std::mutex mut;
 std::shared_mutex shared_mut;
+
+std::string sdata;
+
+// mutexes to protect the shared variables
+std::mutex data_mutex;
+std::mutex completed_mutex; // shows whether data fetching (downloading) is completed
 
 int shared_var = 0;
 int shared_x = 0;
@@ -208,6 +219,81 @@ void rand_nums() {
             std::cout << dist(mt) << std::endl;
         }
     }
+
+
+/*
+simulation of mutithreading with coordination
+through variables
+*/
+
+void fetch_data() {
+    for (int i = 0; i < 5; i++) {
+        std::cout << "Fetcher thread waiting for data..." << std::endl;
+        std::this_thread::sleep_for(std::chrono::seconds(2));
+
+        std::lock_guard<std::mutex> data_lock(data_mutex);
+        // update data
+        sdata += "Block" + std::to_string(i+1);
+        std::cout << "sdata: " << sdata << std::endl;
+        // notify the progress bar thread
+        update_progress = true;
+    }
+    std::cout << "Fetch sdata has ended" << std::endl;
+
+    std::lock_guard<std::mutex> completed_lck(completed_mutex);
+    completed = true;
+}
+
+void progress_bar() {
+    size_t len = 0;
+
+    while (true) {
+        std::cout << "Progress bar thread waiting for data..." << std::endl;
+
+        // wait until there is some new data to display
+        std::unique_lock<std::mutex> data_lck(data_mutex);
+        while (!update_progress) {
+            data_lck.unlock();
+            std::this_thread::sleep_for(std::chrono::milliseconds(10));
+            data_lck.lock();
+        }
+
+        len = sdata.size();
+
+        // set the flag back to false
+        update_progress = false;
+        data_lck.unlock();
+
+        std::cout << "Received " << len << "bytes so far" << std::endl;
+
+        std::lock_guard<std::mutex> complete_lck(completed_mutex);
+        // terminate when the download has finishes
+        if (completed) {
+            std::cout << "Progress bar thread has ended" << std::endl;
+            break;
+        }
+    }
+}
+
+void process_data() {
+    std::cout << "Processing thread waiting for data..." << std::endl;
+
+    // wait until the download is completed
+    std::unique_lock<std::mutex> completed_lck(completed_mutex);
+
+    while (!completed) {
+        completed_lck.unlock();
+        std::this_thread::sleep_for(std::chrono::milliseconds(10));
+        completed_lck.lock();
+    }
+
+    completed_lck.unlock();
+
+    std::lock_guard<std::mutex> data_lck(data_mutex);
+    std::cout << "Processing sdata: " << sdata << std::endl;
+
+    // Some processing
+}
 
 
 int main() {
@@ -437,6 +523,18 @@ int main() {
 
 # endif
     
+
+# ifdef SYNC
+    
+    std::thread fetcher(fetch_data);
+    std::thread prog(progress_bar);
+    std::thread processor(process_data);
+
+    fetcher.join();
+    prog.join();
+    processor.join();
+
+# endif
     
 
     return 0;
