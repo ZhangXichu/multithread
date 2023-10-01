@@ -20,3 +20,4 @@ target_compile_definitions(main PRIVATE DINING)
 
 add_executable(assignment1 assignment1.cpp)
 add_executable(assignment2 assignment2.cpp)
+add_executable(assignment3 assignment3.cpp)
