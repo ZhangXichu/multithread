@@ -6,6 +6,7 @@
 # include <condition_variable>
 # include "include/class_singleton.h"
 # include "include/dining_philosophers.h"
+# include "include/producer_consumer.h"
 
 // flagss for thread communication
 bool update_progress = false;
@@ -596,6 +597,30 @@ use of conditional variable
 
     writer.join();
     reader.join();
+# endif
+
+
+
+# ifdef PROMISE_FUTURE
+    std::promise<int> prom;
+
+    std::future<int> fut = prom.get_future();
+
+    // the producer takes promise as argument
+    std::thread thr_producer(produce, std::ref(prom));
+
+    // the consumer takes future as argument
+    std::thread thr_consumer(consume, std::ref(fut));
+
+    thr_producer.join();
+    thr_consumer.join();
+
+    // can't let multiple consumers retrieve data from the same future
+
+    std::shared_future<int> shared_fut1 = prom.get_future();
+    std::shared_future<int> shared_fut2 = shared_fut1; // copy
+
+
 # endif
     
 
