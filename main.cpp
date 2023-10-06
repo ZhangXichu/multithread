@@ -615,11 +615,29 @@ use of conditional variable
     thr_producer.join();
     thr_consumer.join();
 
+    
+
+
+# endif
+
+
+# ifdef PROMISE_FUTURE_SH
+
+    std::promise<int> prom;
+
     // can't let multiple consumers retrieve data from the same future
 
     std::shared_future<int> shared_fut1 = prom.get_future();
     std::shared_future<int> shared_fut2 = shared_fut1; // copy
 
+    std::thread thr_producer(produce, std::ref(prom));
+
+    std::thread thr_consumer1(consume_sh, std::ref(shared_fut1));
+    std::thread thr_consumer2(consume_sh, std::ref(shared_fut2));
+
+    thr_consumer1.join();
+    thr_consumer2.join();
+    thr_producer.join();
 
 # endif
     

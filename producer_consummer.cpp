@@ -1,5 +1,7 @@
 # include "include/producer_consumer.h"
 
+std::mutex mut_p_c;
+
 void produce(std::promise<int>& px) {
     int x = 42;
 
@@ -20,6 +22,6 @@ void consume_sh(std::shared_future<int>& fx) {
 
     std::lock_guard<std::mutex> lck_guard(mut_p_c);
 
-    std::cout << "Thread " << std::this_thread::get_id() << "with shared future hass x = " << x << std::endl;
+    std::cout << "Thread " << std::this_thread::get_id() << " with shared future hass x = " << x << std::endl;
 
 }
