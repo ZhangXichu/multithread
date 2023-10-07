@@ -21,7 +21,8 @@ add_executable(main main.cpp class_singleton.cpp dining_philosophers.cpp produce
 # target_compile_definitions(main PRIVATE SYNC_COND_VAR)
 # target_compile_definitions(main PRIVATE PROMISE_FUTURE) PROMISE_FUTURE_SH
 # target_compile_definitions(main PRIVATE PROMISE_FUTURE_SH)
-target_compile_definitions(main PRIVATE ATOMIC)
+# target_compile_definitions(main PRIVATE ATOMIC)
+target_compile_definitions(main PRIVATE LOCK_FREE_QUEUE)
 
 
 add_executable(assignment1 assignment1.cpp)

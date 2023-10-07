@@ -8,6 +8,7 @@
 # include "include/class_singleton.h"
 # include "include/dining_philosophers.h"
 # include "include/producer_consumer.h"
+# include "include/lock_free_queue.h"
 
 // flagss for thread communication
 bool update_progress = false;
@@ -657,6 +658,29 @@ use of conditional variable
 
     std::cout << "Exchange returns " << x.exchange(x_cpy) << std::endl;
     std::cout << "After exchange: x = " << x << ", x_cpy = " << x_cpy << std::endl;
+
+# endif
+
+
+# ifdef LOCK_FREE_QUEUE
+
+    lock_free_queue<int> lfq;
+    std::vector<std::thread> threads;
+    int j = 1;
+
+    for (int i = 0; i < 10; i++) {
+        std::thread produce(&lock_free_queue<int>::produce, &lfq, std::ref(i));
+        threads.push_back(std::move(produce));
+
+        std::thread consume(&lock_free_queue<int>::consume, &lfq, std::ref(j));
+        threads.push_back(std::move(consume));
+    }
+
+    for (auto& thr : threads) {
+        thr.join();
+    }
+
+    lfq.print();  // this program should ressult in an empty list
 
 # endif
 
