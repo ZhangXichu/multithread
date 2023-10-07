@@ -4,6 +4,7 @@
 # include <random>
 # include <functional>
 # include <condition_variable>
+# include <atomic>
 # include "include/class_singleton.h"
 # include "include/dining_philosophers.h"
 # include "include/producer_consumer.h"
@@ -641,6 +642,23 @@ use of conditional variable
 
 # endif
     
+# ifdef ATOMIC
+
+    std::atomic<int> x = 0;
+
+    x = 2;
+    int x_cpy = x;
+
+    std::cout << "After assignment: x = " << x << ", x_cpy = " << x_cpy << std::endl;
+
+    x.store(3);
+    std::cout << "After store: x = " << x.load() << std::endl;
+
+
+    std::cout << "Exchange returns " << x.exchange(x_cpy) << std::endl;
+    std::cout << "After exchange: x = " << x << ", x_cpy = " << x_cpy << std::endl;
+
+# endif
 
     return 0;
 }
