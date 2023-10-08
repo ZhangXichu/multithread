@@ -346,6 +346,14 @@ void writer_cond() {
 } 
 
 
+unsigned long long slow_fibonacci(unsigned long long n) {
+    if (n <= 1) {
+        return 1;
+    }
+    return slow_fibonacci(n-1) + slow_fibonacci(n-2);
+}
+
+
 int main() {
 
     /**
@@ -703,6 +711,19 @@ use of conditional variable
     std::cout << "result is: " << fut.get() << std::endl;
 
     thr_ptask.join();
+
+# endif
+
+
+# ifdef ASYNC
+
+    auto result = std::async(slow_fibonacci, 44);
+
+    while (result.wait_for(std::chrono::seconds(1)) != std::future_status::ready) {
+        std::cout << "Waiting for result...." << std::endl;
+    }
+
+    std::cout << "Result = " << result.get() << std::endl;
 
 # endif
 
