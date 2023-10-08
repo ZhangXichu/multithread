@@ -5,6 +5,7 @@
 # include <functional>
 # include <condition_variable>
 # include <atomic>
+# include <future>
 # include "include/class_singleton.h"
 # include "include/dining_philosophers.h"
 # include "include/producer_consumer.h"
@@ -683,6 +684,28 @@ use of conditional variable
     lfq.print();  // this program should ressult in an empty list
 
 # endif
+
+# ifdef PACKAGED_TASK
+
+    std::packaged_task<int(int, int)> ptask([](int a, int b) {
+        std::this_thread::sleep_for(std::chrono::seconds(2));
+
+        std::cout << "Performing " << a << " + " << b << std::endl;
+
+        return a + b;
+    });
+
+    std::future<int> fut = ptask.get_future();
+
+    // start a new thread
+    std::thread thr_ptask(std::move(ptask), 6, 7);
+
+    std::cout << "result is: " << fut.get() << std::endl;
+
+    thr_ptask.join();
+
+# endif
+
 
     return 0;
 }
