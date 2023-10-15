@@ -8,12 +8,18 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}")
 
 message(STATUS "CMAKE_SOURCE_DIR = ${CMAKE_SOURCE_DIR}")
 
+find_package(TBB REQUIRED)
+message(STATUS "TBB_LIBRARIES = ${TBB_LIBRARIES}")
+
 # Include the directory containing header files
 include_directories(${CMAKE_SOURCE_DIR})
 
 add_executable(main main.cpp class_singleton.cpp dining_philosophers.cpp producer_consummer.cpp)
 add_executable(data_parallelism data_parallelism.cpp include/data_parallelism.h)
 add_executable(std_algorithm std_algorithm.cpp include/std_algorithm.h)
+add_executable(exe_policy exe_policy.cpp include/exe_policy.h)
+
+target_link_libraries(exe_policy /usr/lib/x86_64-linux-gnu/libtbb.so)
 
 # target_compile_definitions(main PRIVATE LOCK_GUARD_DEMO)
 # target_compile_definitions(main PRIVATE THR_INTERRUPT_DEMO)
