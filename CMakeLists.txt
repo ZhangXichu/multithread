@@ -12,6 +12,8 @@ message(STATUS "CMAKE_SOURCE_DIR = ${CMAKE_SOURCE_DIR}")
 include_directories(${CMAKE_SOURCE_DIR})
 
 add_executable(main main.cpp class_singleton.cpp dining_philosophers.cpp producer_consummer.cpp)
+add_executable(data_parallelism data_parallelism.cpp include/data_parallelism.h)
+add_executable(std_algorithm std_algorithm.cpp include/std_algorithm.h)
 
 # target_compile_definitions(main PRIVATE LOCK_GUARD_DEMO)
 # target_compile_definitions(main PRIVATE THR_INTERRUPT_DEMO)
