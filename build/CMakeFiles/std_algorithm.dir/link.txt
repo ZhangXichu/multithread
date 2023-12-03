@@ -1,0 +1,1 @@
+/usr/bin/g++ -g CMakeFiles/std_algorithm.dir/std_algorithm.cpp.o -o std_algorithm 

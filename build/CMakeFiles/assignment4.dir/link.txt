@@ -1,0 +1,1 @@
+/usr/bin/g++ -g CMakeFiles/assignment4.dir/assignment4.cpp.o -o assignment4 

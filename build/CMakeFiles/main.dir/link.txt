@@ -1,0 +1,1 @@
+/usr/bin/g++ -g CMakeFiles/main.dir/main.cpp.o CMakeFiles/main.dir/class_singleton.cpp.o CMakeFiles/main.dir/dining_philosophers.cpp.o CMakeFiles/main.dir/producer_consummer.cpp.o -o main 

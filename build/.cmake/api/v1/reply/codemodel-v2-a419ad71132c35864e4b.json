@@ -1,0 +1,141 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"jsonFile" : "directory-.-Debug-f5ebdc15457944623624.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.20"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						4,
+						5,
+						6,
+						7,
+						8,
+						9
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "multithreading",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						4,
+						5,
+						6,
+						7,
+						8,
+						9
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "assignment1::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-assignment1-Debug-03014aa351bbfd817ed7.json",
+					"name" : "assignment1",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "assignment2::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-assignment2-Debug-7c21dfb892b3abe77174.json",
+					"name" : "assignment2",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "assignment3::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-assignment3-Debug-5f2160520f68b5a0d8a4.json",
+					"name" : "assignment3",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "assignment4::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-assignment4-Debug-224dc16ddb4b5b630b21.json",
+					"name" : "assignment4",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "assignment5::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-assignment5-Debug-892a1a31c42e632c0d3a.json",
+					"name" : "assignment5",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "assignment6::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-assignment6-Debug-34b0ddd34440469d8e5a.json",
+					"name" : "assignment6",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "data_parallelism::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-data_parallelism-Debug-455eafad961d847fce20.json",
+					"name" : "data_parallelism",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "exe_policy::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-exe_policy-Debug-e48c06199e4a7d143423.json",
+					"name" : "exe_policy",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "main::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-main-Debug-337f22751f0797b0b824.json",
+					"name" : "main",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "std_algorithm::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-std_algorithm-Debug-5dbfee075fec40340f9c.json",
+					"name" : "std_algorithm",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/home/xichuz/workspace/multithread/build",
+		"source" : "/home/xichuz/workspace/multithread"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 3
+	}
+}

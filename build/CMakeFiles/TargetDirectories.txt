@@ -1,0 +1,12 @@
+/home/xichuz/workspace/multithread/build/CMakeFiles/main.dir
+/home/xichuz/workspace/multithread/build/CMakeFiles/data_parallelism.dir
+/home/xichuz/workspace/multithread/build/CMakeFiles/std_algorithm.dir
+/home/xichuz/workspace/multithread/build/CMakeFiles/exe_policy.dir
+/home/xichuz/workspace/multithread/build/CMakeFiles/assignment1.dir
+/home/xichuz/workspace/multithread/build/CMakeFiles/assignment2.dir
+/home/xichuz/workspace/multithread/build/CMakeFiles/assignment3.dir
+/home/xichuz/workspace/multithread/build/CMakeFiles/assignment4.dir
+/home/xichuz/workspace/multithread/build/CMakeFiles/assignment5.dir
+/home/xichuz/workspace/multithread/build/CMakeFiles/assignment6.dir
+/home/xichuz/workspace/multithread/build/CMakeFiles/edit_cache.dir
+/home/xichuz/workspace/multithread/build/CMakeFiles/rebuild_cache.dir

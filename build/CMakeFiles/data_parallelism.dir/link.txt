@@ -1,0 +1,1 @@
+/usr/bin/g++ -g CMakeFiles/data_parallelism.dir/data_parallelism.cpp.o -o data_parallelism 
